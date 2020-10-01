@@ -10,6 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class ExchangeValue {
+
     private Integer id;
     private String from;
     private String to;
