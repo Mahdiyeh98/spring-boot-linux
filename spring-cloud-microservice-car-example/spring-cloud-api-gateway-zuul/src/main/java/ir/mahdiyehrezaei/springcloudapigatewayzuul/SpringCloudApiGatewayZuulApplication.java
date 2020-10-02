@@ -1,15 +1,16 @@
-package ir.mahdiyehrezaei.springcloudservicecar;
+package ir.mahdiyehrezaei.springcloudapigatewayzuul;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
+@EnableZuulProxy
 @EnableDiscoveryClient
-public class SpringCloudServiceCarApplication {
+public class SpringCloudApiGatewayZuulApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringCloudServiceCarApplication.class, args);
+        SpringApplication.run(SpringCloudApiGatewayZuulApplication.class, args);
     }
-
 }

@@ -16,16 +16,19 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
-    @GetMapping("name/{name}/color/{color}") //price unit
-    public CarDto getCarRequest(@PathVariable String name, @PathVariable String color){
-        CarInfo carInfo = carRepository.findByNameContainingAndColorContaining(name, color);
+    @GetMapping("brand/{brand}/name/{name}/color/{color}") //price unit
+    public CarDto getCarRequest(@PathVariable String brand,
+                                @PathVariable String name,
+                                @PathVariable String color){
+        CarInfo carInfo = carRepository.findByBrandContainingAndNameContainingAndColorContaining(brand, name, color);
         ModelMapper modelMapper = new ModelMapper();
         CarDto carDto = modelMapper.map(carInfo, CarDto.class);
         return new CarDto()
+                .setId(carDto.getId())
+                .setBrand(brand)
                 .setName(name)
                 .setColor(color)
                 .setPrice(carDto.getPrice())
-                .setBrand(carDto.getBrand())
                 .setProductionYear(carDto.getProductionYear());
     }
 }
