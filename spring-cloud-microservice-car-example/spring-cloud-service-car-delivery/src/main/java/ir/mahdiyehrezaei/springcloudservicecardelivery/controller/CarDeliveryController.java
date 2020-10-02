@@ -39,9 +39,10 @@ public class CarDeliveryController {
 
         int exchangeCurrency = 0;
         int day = 0;
+        String currency_city = null;
 
         if (currency.equals("rial")) {
-
+            currency_city ="rial";
             exchangeCurrency = 290000;
             if (city.equals("tehran") || city.equals("alborz")) {
                 day = 32;
@@ -53,6 +54,7 @@ public class CarDeliveryController {
                         .setDay(day);
             }
         } else if (currency.equals("inr")) {
+            currency_city ="inr";
             exchangeCurrency = 73;
             if (city.equals("delhi")) {
                 day = 23;
@@ -65,7 +67,8 @@ public class CarDeliveryController {
             }
         }
 
-        carDelivery.setCarPricesInYourCountry((String.valueOf(Integer.parseInt(carInfo.getPrice())*exchangeCurrency)) + " Rials")
+        carDelivery.setCarPricesInYourCountry((String.valueOf(Integer.parseInt(carInfo.getPrice())*exchangeCurrency)) +
+                " " + currency_city)
                 .setDeliveryTime(String.valueOf(day) + " days later.")
                 .setPrice("$"+carInfo.getPrice());
         return carDelivery;
