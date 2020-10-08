@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("currency")
 public class CurrencyController {
@@ -29,8 +32,15 @@ public class CurrencyController {
         CurrencyValue currencyValue = currencyRepository.findByFromContainingAndToContaining(from, to);
         ModelMapper modelMapper = new ModelMapper();
         currencyValueDto = modelMapper.map(currencyValue, CurrencyValueDto.class);
-        currencyValueDto.setPort(Integer.parseInt(environment.getProperty("server.port")));
+//        currencyValueDto.setPort(Integer.parseInt(environment.getProperty("server.port")));
         currencyValueDto.setCurrencyMultiplier(currencyValue.getCurrencyMultiplier());
         return currencyValueDto;
+    }
+
+    @GetMapping("list")
+    public List<CurrencyValueDto> getCurrencyValueDto(){
+        List<CurrencyValueDto> currencyValueDtoList = new ArrayList<>();
+        currencyRepository.findAll().forEach(currencyValueDtoList::add);
+        return currencyValueDtoList;
     }
 }

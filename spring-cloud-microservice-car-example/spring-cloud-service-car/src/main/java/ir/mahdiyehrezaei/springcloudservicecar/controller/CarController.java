@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+
+import java.util.List;
 
 @RestController
 @RequestMapping("car")
@@ -16,7 +20,12 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
-    @GetMapping("brand/{brand}/name/{name}/color/{color}") //price unit
+    @GetMapping
+    public ModelAndView showHelp(){
+        return new ModelAndView("help.html");
+    }
+
+    @GetMapping("brand/{brand}/name/{name}/color/{color}")
     public CarDto getCarRequest(@PathVariable String brand,
                                 @PathVariable String name,
                                 @PathVariable String color){
@@ -30,5 +39,10 @@ public class CarController {
                 .setColor(color)
                 .setPrice(carDto.getPrice())
                 .setProductionYear(carDto.getProductionYear());
+    }
+
+    @GetMapping("list")
+    public List<CarInfo> getAllCars(){
+        return carRepository.findAll();
     }
 }
