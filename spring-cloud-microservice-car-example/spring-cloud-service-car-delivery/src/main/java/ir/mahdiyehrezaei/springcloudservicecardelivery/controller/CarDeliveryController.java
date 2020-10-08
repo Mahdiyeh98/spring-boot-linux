@@ -16,7 +16,7 @@ public class CarDeliveryController {
     @Autowired
     CarDeliveryProxy carDeliveryProxy;
 
-    //localhost:8100/car-delivery/i8/
+    //localhost:8100/car-delivery/brand/bmw/name/i8/color/white/currency/rial/city/tehran
     @GetMapping("brand/{brand}/name/{name}/color/{color}/currency/{currency}/city/{city}")
     public CarDelivery getCarDelivery(@PathVariable String brand,
                                       @PathVariable String name,
@@ -35,42 +35,52 @@ public class CarDeliveryController {
                 .setName(name)
                 .setColor(color)
                 .setCity(city)
-                .setCurrency(currency);
+                .setCurrency(currency)
+                .setShippingFee(getShipping(city))
+                .setCarPricesInYourCountry(convertCarPrice(carInfo.getPrice(), currency))
+                .setPrice("$" + carInfo.getPrice());
 
-        int exchangeCurrency = 0;
-        int day = 0;
-        String currency_city = null;
 
-        if (currency.equals("rial")) {
-            currency_city ="rial";
-            exchangeCurrency = 290000;
-            if (city.equals("tehran") || city.equals("alborz")) {
-                day = 32;
-                carDelivery.setShippingFee(String.valueOf(15 * exchangeCurrency) + " rials ") // convert 15$ to rial
-                        .setDay(day);
-            } else if (city.equals("bandar abbas") || city.equals("hormozgan")) {
-                day = 28;
-                carDelivery.setShippingFee(String.valueOf(11 * exchangeCurrency) + " rails ")
-                        .setDay(day);
-            }
-        } else if (currency.equals("inr")) {
-            currency_city ="inr";
-            exchangeCurrency = 73;
-            if (city.equals("delhi")) {
-                day = 23;
-                carDelivery.setShippingFee(String.valueOf(21 * exchangeCurrency) + " inr ")
-                        .setDay(day);
-            } else if (city.equals("punjab")) {
-                day = 26;
-                carDelivery.setShippingFee(String.valueOf(23 * exchangeCurrency) + " inr ")
-                        .setDay(day);
-            }
-        }
-
-        carDelivery.setCarPricesInYourCountry((String.valueOf(Integer.parseInt(carInfo.getPrice())*exchangeCurrency)) +
-                " " + currency_city)
-                .setDeliveryTime(String.valueOf(day) + " days later.")
-                .setPrice("$"+carInfo.getPrice());
         return carDelivery;
+    }
+
+    private Integer getCountry(String currency) {
+        switch (currency) {
+            case "rial":
+                return 29000;
+            case "inr":
+                return 73;
+            default:
+                return 0;
+        }
+    }
+
+    private String getShipping(String city) {
+        int currency = 0;
+        switch (city) {
+            case "tehran": {
+                currency = getCountry("rial") * 32;
+                return String.valueOf(currency) + " rial.";
+            }
+            case "bandar abbas": {
+                currency = getCountry("rial") * 28;
+                return String.valueOf(currency) + " rial.";
+            }
+            case "delhi": {
+                currency = getCountry("inr") * 21;
+                return String.valueOf(currency) + " inr.";
+            }
+            case "punjab": {
+                currency = getCountry("inr") * 23;
+                return String.valueOf(currency) + " inr.";
+            }
+            default:
+                return "not found!";
+        }
+    }
+
+    private String convertCarPrice(String price, String currency) {
+        String total = String.valueOf(Integer.parseInt(price) * getCountry(currency));
+        return total + " " + currency;
     }
 }

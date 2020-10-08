@@ -20,8 +20,5 @@ public class CarDelivery {
     private String currency;
     private String carPricesInYourCountry;
     private String shippingFee;
-    @JsonIgnore
-    private int day;
-    private String deliveryTime;
 
 }
