@@ -20,9 +20,14 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
-    @GetMapping
+    @GetMapping("help")
     public ModelAndView showHelp(){
-        return new ModelAndView("help.html");
+        return new ModelAndView("help");
+    }
+
+    @GetMapping
+    public ModelAndView home(){
+        return new ModelAndView("index");
     }
 
     @GetMapping("brand/{brand}/name/{name}/color/{color}")
